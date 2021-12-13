@@ -1,0 +1,25 @@
+{
+  "name": "papa-ab-player",
+  "version": "1.0.0",
+  "description": "",
+  "exports": "./index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmitro02/papa-ab-player.git"
+  },
+  "author": "dmitro02@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmitro02/papa-ab-player/issues"
+  },
+  "homepage": "https://github.com/dmitro02/papa-ab-player#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "lowdb": "^3.0.0"
+  }
+}
