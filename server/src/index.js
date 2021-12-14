@@ -14,8 +14,8 @@ app.use('/books', express.static(booksFolder))
 
 app.get('/books', (req, res) => {
     try {
-        const books = fs.readdirSync(booksFolder)
-        res.send({ books, booksFolder })
+        const payload = fs.readdirSync(booksFolder)
+        res.send(payload)
     } catch (e) {
         console.log(e.message)
         res.status(500).end(e.message)
