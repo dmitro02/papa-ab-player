@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import BookPlayer from './BookPlayer'
-import BookShelf from './BookShelf'
+import BookCase from './BookCase'
 import { fetchBooks } from '../bookService'
 
 const MainContainer = () => {
@@ -19,7 +19,7 @@ const MainContainer = () => {
                     book={selectedBook} 
                     goHome={() => setSelectedBook(null)}
                 />
-                : <BookShelf 
+                : <BookCase 
                     bookList={bookList} 
                     selectBook={setSelectedBook} 
                     refresh={loadBooks}
