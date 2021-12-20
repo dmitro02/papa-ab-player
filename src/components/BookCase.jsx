@@ -1,41 +1,63 @@
-const BookCase = ({ bookList, selectBook, refresh }) => {
-    const openBook = (book) => {
-        selectBook('http://localhost:8888/books/' + book)
-    }
+import { useState } from 'react'
+import BookShelf from './BookShelf'
+export const PAGE_SIZE = 10
+
+const BookCase = ({ bookList, selectBook, refresh}) => {
+    const [ pageNumber, setPageNumber ] = useState(0)
+
+    const loading = !bookList || !bookList.length 
+
+    const maxPageNumber = Math.floor(bookList.length / PAGE_SIZE)
+
+    const hasPrevPage = pageNumber >= 2
+    const hasNextPage = maxPageNumber - pageNumber >= 2
 
     const goToPreviousPage = () => {
-
+        hasPrevPage && setPageNumber(pageNumber - 2)
     }
 
     const goToNextPage = () => {
-
+        hasNextPage && setPageNumber(pageNumber + 2)
     }
 
     return (
         <>
             <div className="top-bar">
                 <div>
-                    <button className="nav-arrow-left-btn" onClick={goToPreviousPage} />
-                    <button className="nav-arrow-right-btn" onClick={goToNextPage} />
+                    <button 
+                        className="nav-arrow-left-btn" 
+                        onClick={goToPreviousPage}
+                        disabled={!hasPrevPage} 
+                    />
+                    <button 
+                        className="nav-arrow-right-btn" 
+                        onClick={goToNextPage} 
+                        disabled={!hasNextPage}
+                    />
                 </div>
-                <button className="reload-btn" onClick={refresh} />
+                <button 
+                    className="reload-btn" 
+                    onClick={refresh} 
+                    disabled={loading}
+                />
             </div>
-                <div className="book-case"> 
-                    <div className="book-shelf left">
-                        {bookList && bookList.slice(0,10).map(book => 
-                            <div className="book-title" key={book} onClick={() => openBook(book)}>
-                                {book}
-                            </div>)
-                        }
-                    </div>
-                    <div className="book-shelf right">
-                        {bookList && bookList.slice(10,20).map(book => 
-                            <div className="book-title" key={book} onClick={() => openBook(book)}>
-                                {book}
-                            </div>)
-                        }
-                    </div>
-            </div>
+            {loading 
+                ? <div className='spinner' />
+                : <div className="book-case"> 
+                        <BookShelf 
+                            bookList={bookList} 
+                            pageNumber={pageNumber} 
+                            selectBook={selectBook} 
+                            customClasses={['left']}
+                        />
+                        <BookShelf 
+                            bookList={bookList} 
+                            pageNumber={pageNumber + 1} 
+                            selectBook={selectBook} 
+                            customClasses={['right']}
+                        />                      
+                </div>
+            }
         </>
     )
 }

@@ -55,7 +55,9 @@ button:disabled {
 .top-bar {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    margin: 20px 0 10px;
+    border-bottom: 6px solid;
+    height: 90px;
 }
 
 .book-case {
@@ -66,7 +68,6 @@ button:disabled {
 .book-shelf {
     width: 50%;
     height: inherit;
-    border-top: 2px solid white;
 }
 
 .book-shelf.left {
@@ -89,4 +90,22 @@ button:disabled {
 
 .book-title:nth-child(even) {
     background-color: #003000;
+}
+
+/*############### LOADING SPINNER ###############*/
+
+.spinner {
+    margin: 250px auto;
+    border-radius: 50%;
+    border-style: solid;
+    animation: rotation 1.2s linear infinite;
+    width: 200px;
+    height: 200px;
+    border-width: 30px;
+    border-color: white transparent white transparent;
+}
+@keyframes rotation {
+    100% {
+        transform: rotate(360deg);
+    }
 }

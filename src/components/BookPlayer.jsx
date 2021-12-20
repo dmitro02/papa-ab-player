@@ -1,3 +1,6 @@
+import { FaList } from 'react-icons/fa';
+import { getBookTitle } from '../utils'
+
 const BookPlayer = ({ book, goHome }) => {
     const renderProgressBar = () => {
         const audio = document.getElementsByTagName('audio')[0]
@@ -7,10 +10,13 @@ const BookPlayer = ({ book, goHome }) => {
         const newWidth = Math.floor(audio.currentTime * k) + 'px'
         bar.style.width = newWidth
     }
-
+ 
     return (
         <div className="book-player">
-            <div className="button" onClick={goHome}>HOME</div>
+            <div className="top-bar">
+                <div className='book-title' onClick={goHome}>{getBookTitle(book)}</div>
+                <button onClick={goHome}><FaList size={80}/></button>
+            </div>
             <audio 
                 controls 
                 src={book} type="audio/mpeg" 

@@ -8,7 +8,10 @@ const MainContainer = () => {
 
     const [ selectedBook, setSelectedBook ] = useState(null)
 
-    const loadBooks = () => fetchBooks().then(setBookList)
+    const loadBooks = () => {
+        setBookList([])
+        fetchBooks().then(setBookList)
+    }
 
     useEffect(loadBooks, [])
     
