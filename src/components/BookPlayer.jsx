@@ -1,18 +1,31 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { FaList } from 'react-icons/fa';
 import { BsPlayBtn } from 'react-icons/bs';
 import { BsPauseBtn } from 'react-icons/bs';
 import { BiVolumeFull } from 'react-icons/bi';
-import { getBookTitle, formatTime } from '../utils'
+import { getBookTitle, formatTime, afterIdle } from '../utils'
+import LoadingSpinner from './LoadingSpinner';
 
-const DEFAULT_VOLUME = 0.5
+const DEFAULT_VOLUME = 0.3
+const LS_ITEM_VOLUME = 'papaAbPlayer.volume'
 
 const BookPlayer = ({ book, goHome }) => {
     const [ isPlaying, setIsPlaying ] = useState(false)
+    const [ isLoadingMeta, setIsLoadingMeta ] = useState(true)
+
+    useEffect(() => {
+        const volume = 
+            parseFloat(localStorage.getItem(LS_ITEM_VOLUME)) 
+            || DEFAULT_VOLUME
+        setVolume(volume)
+        volumeRef.current.value = volume
+    }, [])
 
     const audioRef = useRef()
     const progressRef = useRef()
     const timeRef = useRef()
+    const durationRef = useRef()
+    const volumeRef = useRef()
 
     const play = async () => {
         await audioRef.current.play()
@@ -25,8 +38,11 @@ const BookPlayer = ({ book, goHome }) => {
     }
 
     const handleLoadedMetadata = () => {
-        progressRef.current.setAttribute('max', audioRef.current.duration)
-        timeRef.current.textContent = formatTime(audioRef.current.currentTime)
+        const { duration, currentTime } = audioRef.current
+        progressRef.current.setAttribute('max', duration)
+        timeRef.current.textContent = formatTime(currentTime)
+        durationRef.current.textContent = '/' + formatTime(duration)
+        setIsLoadingMeta(false)
     }
 
     const updateProgress = () => {
@@ -43,12 +59,25 @@ const BookPlayer = ({ book, goHome }) => {
         aeEl.currentTime = pos * aeEl.duration
     }
 
+    const handleVolumeChange = (e) => {
+        const val = e.target.value
+        setVolume(val)
+        saveVolume(val)
+    }
+
+    const setVolume = (volume) => audioRef.current.volume = volume
+
+    const saveVolume = afterIdle((volume) => {
+        localStorage.setItem(LS_ITEM_VOLUME, volume)
+    }, 1000)
+
     return (
-        <div className="book-player">
-            <div className="top-bar">
+        <>
+            <div className="top-bar big-title">
                 <div className='book-title' onClick={goHome}>{getBookTitle(book)}</div>
                 <button className="home-btn" onClick={goHome}><FaList size={80} /></button>
             </div>
+            {isLoadingMeta && <LoadingSpinner />}
             <audio 
                 ref={audioRef} 
                 src={book} type="audio/mpeg" 
@@ -64,7 +93,10 @@ const BookPlayer = ({ book, goHome }) => {
                     : <button onClick={play}><BsPlayBtn size={280} /></button>
                 }
             </div>
-            <div className="time-indicator" ref={timeRef}>00:00:00</div>
+            <div className="time-bar">
+                <span ref={timeRef} />
+                <span ref={durationRef}/>
+            </div>
             <progress 
                 className="progress-bar" 
                 value="0" 
@@ -82,9 +114,11 @@ const BookPlayer = ({ book, goHome }) => {
                     max="1"
                     step="0.01"
                     defaultValue={DEFAULT_VOLUME}
+                    onChange={handleVolumeChange}
+                    ref={volumeRef}
                 />
             </div>
-        </div>
+        </>
     )
 }
 

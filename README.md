@@ -3,13 +3,14 @@
 
 ## TODO
 
-- loading spinner untill book is loaded into player
-- volume control
 - "Resume" button
-- duration indicator
 - variables for volume slider CSS
 - save last played book in localStotage
-- save volume in localStotage
+- start playing once book is selected
+- mute on volume icon click (change icon)
+- sort books alphabetically
+- move completed books to the end
+- button to mark book as completed
 
 ***
 

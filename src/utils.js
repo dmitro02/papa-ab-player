@@ -17,3 +17,11 @@ export const format2Digit = (value) => {
     value = Math.ceil(value)
     return value < 10 ? '0' + value : value
 }
+
+export const afterIdle = (handler, delayMs) => {
+    let timeout
+    return (...args) => {
+        timeout && clearTimeout(timeout)
+        timeout = setTimeout(() => handler(...args), delayMs)
+    }
+}

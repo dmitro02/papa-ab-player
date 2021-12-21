@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import BookShelf from './BookShelf'
+import LoadingSpinner from './LoadingSpinner'
 export const PAGE_SIZE = 10
 
 const BookCase = ({ bookList, selectBook, refresh}) => {
     const [ pageNumber, setPageNumber ] = useState(0)
 
-    const loading = !bookList || !bookList.length 
+    const isLoading = !bookList || !bookList.length 
 
     const maxPageNumber = Math.floor(bookList.length / PAGE_SIZE)
 
@@ -38,26 +39,24 @@ const BookCase = ({ bookList, selectBook, refresh}) => {
                 <button 
                     className="reload-btn" 
                     onClick={refresh} 
-                    disabled={loading}
+                    disabled={isLoading}
                 />
             </div>
-            {loading 
-                ? <div className='spinner' />
-                : <div className="book-case"> 
-                        <BookShelf 
-                            bookList={bookList} 
-                            pageNumber={pageNumber} 
-                            selectBook={selectBook} 
-                            customClasses={['left']}
-                        />
-                        <BookShelf 
-                            bookList={bookList} 
-                            pageNumber={pageNumber + 1} 
-                            selectBook={selectBook} 
-                            customClasses={['right']}
-                        />                      
-                </div>
-            }
+            {isLoading && <LoadingSpinner />}
+            <div className="book-case"> 
+                    <BookShelf 
+                        bookList={bookList} 
+                        pageNumber={pageNumber} 
+                        selectBook={selectBook} 
+                        customClasses={['left']}
+                    />
+                    <BookShelf 
+                        bookList={bookList} 
+                        pageNumber={pageNumber + 1} 
+                        selectBook={selectBook} 
+                        customClasses={['right']}
+                    />                      
+            </div>
         </>
     )
 }
