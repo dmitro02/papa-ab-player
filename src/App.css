@@ -66,6 +66,7 @@ button:disabled {
     line-height: 60px;
     padding: 0;
     margin: 0 10px 0 0;
+    font-weight: bold;
 }
 
 .book-case {
