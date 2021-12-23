@@ -1,9 +1,16 @@
 import { useState } from 'react'
 import BookShelf from './BookShelf'
 import LoadingSpinner from './LoadingSpinner'
+import { 
+    fetchBooks, 
+    setSelectedBookId, 
+    getSelectedBook,
+    updateLibrary 
+} from '../bookService'
+
 export const PAGE_SIZE = 10
 
-const BookCase = ({ bookList, selectBook, refresh}) => {
+const BookCase = ({ bookList, selectBook, refresh, resume }) => {
     const [ pageNumber, setPageNumber ] = useState(0)
 
     const isLoading = !bookList || !bookList.length 
@@ -21,9 +28,17 @@ const BookCase = ({ bookList, selectBook, refresh}) => {
         hasNextPage && setPageNumber(pageNumber + 2)
     }
 
+    const resume = () =>
+        getSelectedBook().then((book) => setSelectedBook(book))
+
     return (
         <>
             <div className="top-bar">
+                <button 
+                    className="" 
+                    onClick={resume}
+                    disabled={!resume} 
+                >RESUME</button>
                 <div>
                     <button 
                         className="nav-arrow-left-btn" 

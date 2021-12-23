@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
 import BookPlayer from './BookPlayer'
 import BookCase from './BookCase'
-import { fetchBooks, updateLibrary } from '../bookService'
+import { 
+    fetchBooks, 
+    setSelectedBookId, 
+    getSelectedBook,
+    updateLibrary 
+} from '../bookService'
 
 const MainContainer = () => {
     const [ bookList, setBookList ] = useState([])
@@ -15,8 +20,18 @@ const MainContainer = () => {
             : fetchBooks().then(setBookList)
     }
 
-    useEffect(loadBooks, [])
+    const selectBook = (book) =>
+        setSelectedBookId(book.id)
+            .then((book) => setSelectedBook(book))
+
+    useEffect(() => {
+        loadBooks()
+        getSelectedBook().then((book) => setSelectedBook(book))
+    }, [])
     
+    const resume = () =>
+        getSelectedBook().then((book) => setSelectedBook(book))
+
     return (
         <div className="main-container">
             {selectedBook 
@@ -26,8 +41,9 @@ const MainContainer = () => {
                 />
                 : <BookCase 
                     bookList={bookList} 
-                    selectBook={setSelectedBook} 
+                    selectBook={selectBook} 
                     refresh={() => loadBooks(true)}
+                    resume={resume}
                 />
             }
         </div>

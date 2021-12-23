@@ -13,16 +13,27 @@ export const getBookList = () =>
     Object.entries(db.data.books)
           .map(([ k, v ]) => ({ id: k, ...v }))
 
-export const getBook = id => db.data.books[id]
+export const getBook = id => {
+    const book = db.data.books[id]
+    return { id, ...book }
+}
 
-export const setBook = (id, book) => {
+export const setBook = async (id, book) => {
     const { books } = db.data
     books[id] = {
         ...books[id],
         ...book
     }
-    db.write()
-    return books[id]
+    await db.write()
+    return getBook(id)
+}
+
+export const getSelectedBook = () =>
+    getBook(db.data.selectedBookId)
+
+export const setSelectedBookId = async (id) => {
+    db.data.selectedBookId = id
+    await db.write()
 }
 
 const generateId = (length = 10) => {
@@ -33,19 +44,20 @@ const generateId = (length = 10) => {
     return id.substring(0, length)
 }
 
-export const updateDb = (booksFolder) => {
+export const updateDb = async (booksFolder) => {
     const files = fs.readdirSync(booksFolder)
     const { books } = db.data
+    const bookList = Object.values(books)
     files.forEach(fileName => {
-        if (!Object.values(books).find((it) => it.fl === fileName)) {
+        if (!bookList.find((it) => it.fl === fileName)) {
             books[generateId()] = {
                 fl: fileName,
                 ps: 0,
                 cm: false
             }
-            db.write()
         }
     })
+    await db.write()
 }
 
 export const initDb = async (booksFolder) => {

@@ -3,7 +3,9 @@ import {
     initDb, 
     getBookList, 
     getBook, 
-    setBook
+    setBook,
+    getSelectedBook,
+    setSelectedBookId
 } from './db.js'
 import { join } from 'path'
 
@@ -13,9 +15,9 @@ const BOOKS_FOLDER = 'D:\\Downloads\\Audio\\Audiobooks\\Алиса в стран
 const app = express()
 app.use(express.json())
 
-app.get('/books', (req, res) => {
+app.get('/books', async (req, res) => {
     try {
-        req.query.updateDb === 'true' && initDb(BOOKS_FOLDER)
+        req.query.updateDb === 'true' && await initDb(BOOKS_FOLDER)
         const payload = getBookList()
         res.send(payload)
     } catch (e) {
@@ -24,10 +26,33 @@ app.get('/books', (req, res) => {
     }
 })
 
+app.get('/books/selected', (req, res) => {
+    try {
+        const payload = getSelectedBook()
+        res.send(payload)
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).end(e.message)
+    }
+})
+
+app.post('/books/selected', (req, res) => {
+    try {
+        setSelectedBookId(req.query.id)
+            .then(() => {
+                const payload = getSelectedBook()
+                res.send(payload)
+            })        
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).end(e.message)
+    }
+})
+
 app.post('/book/:id', (req, res) => {
     try {
-        const payload = setBook(req.params.id, req.body)
-        res.sendStatus(201).send(payload)
+        setBook(req.params.id, req.body)
+            .then(book => res.sendStatus(201).send(book))
     } catch (e) {
         console.log(e.message)
         res.status(500).end(e.message)
