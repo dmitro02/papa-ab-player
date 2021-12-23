@@ -36,23 +36,21 @@ app.get('/books/selected', (req, res) => {
     }
 })
 
-app.post('/books/selected', (req, res) => {
+app.post('/books/selected', async (req, res) => {
     try {
-        setSelectedBookId(req.query.id)
-            .then(() => {
-                const payload = getSelectedBook()
-                res.send(payload)
-            })        
+        await setSelectedBookId(req.query.id)
+        const payload = getSelectedBook()
+        res.sendStatus(201).send(payload)      
     } catch (e) {
         console.log(e.message)
         res.status(500).end(e.message)
     }
 })
 
-app.post('/book/:id', (req, res) => {
+app.post('/book/:id', async (req, res) => {
     try {
-        setBook(req.params.id, req.body)
-            .then(book => res.sendStatus(201).send(book))
+        const payload = await setBook(req.params.id, req.body)
+        res.sendStatus(201).send(payload)
     } catch (e) {
         console.log(e.message)
         res.status(500).end(e.message)
