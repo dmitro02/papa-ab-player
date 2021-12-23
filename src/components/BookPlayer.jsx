@@ -6,6 +6,7 @@ import { BiVolumeFull } from 'react-icons/bi';
 import { getBookTitle, formatTime, afterIdle } from '../utils'
 import LoadingSpinner from './LoadingSpinner';
 
+const MEDIA_API_URL = 'http://localhost:8888/media/'
 const DEFAULT_VOLUME = 0.3
 const LS_ITEM_VOLUME = 'papaAbPlayer.volume'
 
@@ -74,18 +75,18 @@ const BookPlayer = ({ book, goHome }) => {
     return (
         <>
             <div className="top-bar big-title">
-                <div className='book-title' onClick={goHome}>{getBookTitle(book)}</div>
+                <div className='book-title' onClick={goHome}>{getBookTitle(book.fl)}</div>
                 <button className="home-btn" onClick={goHome}><FaList size={80} /></button>
             </div>
             {isLoadingMeta && <LoadingSpinner />}
             <audio 
-                ref={audioRef} 
-                src={book} type="audio/mpeg" 
+                src={MEDIA_API_URL + book.id} type="audio/mpeg" 
                 onPlay={() => console.log('play')}
                 onPause={() => console.log('pause')}
                 onEnded={() => console.log('ended')}
                 onLoadedMetadata={handleLoadedMetadata}
                 onTimeUpdate={updateProgress}
+                ref={audioRef}
             />
             <div className="play-pause-btns">
                 {isPlaying 

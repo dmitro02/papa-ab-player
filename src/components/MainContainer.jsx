@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react'
 import BookPlayer from './BookPlayer'
 import BookCase from './BookCase'
-import { fetchBooks } from '../bookService'
+import { fetchBooks, updateLibrary } from '../bookService'
 
 const MainContainer = () => {
     const [ bookList, setBookList ] = useState([])
 
     const [ selectedBook, setSelectedBook ] = useState(null)
 
-    const loadBooks = () => {
+    const loadBooks = (shouldUpdateDb) => {
         setBookList([])
-        fetchBooks().then(setBookList)
+        shouldUpdateDb
+            ? updateLibrary().then(setBookList)
+            : fetchBooks().then(setBookList)
     }
 
     useEffect(loadBooks, [])
@@ -25,7 +27,7 @@ const MainContainer = () => {
                 : <BookCase 
                     bookList={bookList} 
                     selectBook={setSelectedBook} 
-                    refresh={loadBooks}
+                    refresh={() => loadBooks(true)}
                 />
             }
         </div>
