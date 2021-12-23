@@ -9,7 +9,7 @@ const MEDIA_API_URL = 'http://localhost:8888/media/'
 const DEFAULT_VOLUME = 0.3
 const LS_ITEM_VOLUME = 'papaAbPlayer.volume'
 
-const BookPlayer = ({ book, goHome }) => {
+const BookPlayer = ({ book, goHome, autoStart }) => {
     const [ isPlaying, setIsPlaying ] = useState(false)
     const [ isLoadingMeta, setIsLoadingMeta ] = useState(true)
 
@@ -43,6 +43,7 @@ const BookPlayer = ({ book, goHome }) => {
         timeRef.current.textContent = formatTime(currentTime)
         durationRef.current.textContent = '/' + formatTime(duration)
         setIsLoadingMeta(false)
+        autoStart && audioRef.current.play()
     }
 
     const updateProgress = () => {
@@ -65,6 +66,10 @@ const BookPlayer = ({ book, goHome }) => {
         saveVolume(val)
     }
 
+    const handlePlay = () => {
+        setIsPlaying(true)
+    }
+
     const setVolume = (volume) => audioRef.current.volume = volume
 
     const saveVolume = afterIdle((volume) => {
@@ -80,7 +85,7 @@ const BookPlayer = ({ book, goHome }) => {
             {isLoadingMeta && <LoadingSpinner />}
             <audio 
                 src={MEDIA_API_URL + book.id} type="audio/mpeg" 
-                onPlay={() => console.log('play')}
+                onPlay={handlePlay}
                 onPause={() => console.log('pause')}
                 onEnded={() => console.log('ended')}
                 onLoadedMetadata={handleLoadedMetadata}

@@ -13,7 +13,8 @@ const MainContainer = () => {
 
     const [ selectedBook, setSelectedBook ] = useState(null)
 
-    const [ showPlayer, setShowPlayer ] = useState(false)
+    const [ showPlayer, setShowPlayer ] = 
+        useState({ show: false, autoStart: false})
 
     const loadBooks = (shouldUpdateDb) => {
         setBookList([])
@@ -22,11 +23,13 @@ const MainContainer = () => {
             : fetchBooks().then(setBookList)
     }
 
+    const resume = () => setShowPlayer({ show: true, autoStart: true })
+
     const selectBook = (book) =>
         setSelectedBookId(book.id)
             .then((book) => {
                 setSelectedBook(book)
-                setShowPlayer(true)
+                resume()
             })
 
     useEffect(() => {
@@ -34,19 +37,18 @@ const MainContainer = () => {
         getSelectedBook().then((book) => {
             if (book.id) {
                 setSelectedBook(book)
-                setShowPlayer(true)
+                setShowPlayer({ show: true })
             }
         })
     }, [])
-    
-    const resume = () => setShowPlayer(true)
 
     return (
         <div className="main-container">
-            {showPlayer 
+            {showPlayer.show 
                 ? <BookPlayer 
                     book={selectedBook} 
-                    goHome={() => setShowPlayer(false)}
+                    goHome={() => setShowPlayer({ show: false })}
+                    autoStart={showPlayer.autoStart}
                 />
                 : <BookCase 
                     bookList={bookList} 

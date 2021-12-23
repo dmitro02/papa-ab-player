@@ -3,10 +3,8 @@
 
 ## TODO
 
-- "Resume" button
+- button tooltips
 - variables for volume slider CSS
-- start playing once book is selected
-- mute on volume icon click (change icon)
 - sort books alphabetically
 - move completed books to the end
 - button to mark book as completed
