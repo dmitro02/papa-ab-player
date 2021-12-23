@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
-import { FaList } from 'react-icons/fa';
-import { BsPlayBtn } from 'react-icons/bs';
-import { BsPauseBtn } from 'react-icons/bs';
-import { BiVolumeFull } from 'react-icons/bi';
+import { FaList } from 'react-icons/fa'
+import { BsPlayBtn, BsPauseBtn } from 'react-icons/bs'
+import { BiVolumeFull } from 'react-icons/bi'
 import { getBookTitle, formatTime, afterIdle } from '../utils'
-import LoadingSpinner from './LoadingSpinner';
+import LoadingSpinner from './LoadingSpinner'
 
 const MEDIA_API_URL = 'http://localhost:8888/media/'
 const DEFAULT_VOLUME = 0.3

@@ -27,14 +27,15 @@ button {
     content: '\1F82E';
 }
 
-.nav-arrow-left-btn {
-    margin-left: 745px;
+.resume-btn {
+    margin-top: -16px;
 }
 
 .reload-btn {
     font-size: 60px;
     line-height: 60px;
     height: 60px;
+    margin-right: 28px;
 }
 
 .reload-btn::after {

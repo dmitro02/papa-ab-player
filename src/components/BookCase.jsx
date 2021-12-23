@@ -1,16 +1,11 @@
 import { useState } from 'react'
 import BookShelf from './BookShelf'
 import LoadingSpinner from './LoadingSpinner'
-import { 
-    fetchBooks, 
-    setSelectedBookId, 
-    getSelectedBook,
-    updateLibrary 
-} from '../bookService'
+import { VscDebugContinue } from 'react-icons/vsc'
 
 export const PAGE_SIZE = 10
 
-const BookCase = ({ bookList, selectBook, refresh, resume }) => {
+const BookCase = ({ bookList, selectBook, refresh, resume, disableResume }) => {
     const [ pageNumber, setPageNumber ] = useState(0)
 
     const isLoading = !bookList || !bookList.length 
@@ -28,17 +23,14 @@ const BookCase = ({ bookList, selectBook, refresh, resume }) => {
         hasNextPage && setPageNumber(pageNumber + 2)
     }
 
-    const resume = () =>
-        getSelectedBook().then((book) => setSelectedBook(book))
-
     return (
         <>
             <div className="top-bar">
                 <button 
-                    className="" 
-                    onClick={resume}
-                    disabled={!resume} 
-                >RESUME</button>
+                    className="reload-btn" 
+                    onClick={refresh} 
+                    disabled={isLoading}
+                />
                 <div>
                     <button 
                         className="nav-arrow-left-btn" 
@@ -52,10 +44,12 @@ const BookCase = ({ bookList, selectBook, refresh, resume }) => {
                     />
                 </div>
                 <button 
-                    className="reload-btn" 
-                    onClick={refresh} 
-                    disabled={isLoading}
-                />
+                    className="resume-btn" 
+                    onClick={resume}
+                    disabled={disableResume} 
+                >
+                    <VscDebugContinue size={90} />
+                </button>
             </div>
             {isLoading && <LoadingSpinner />}
             <div className="book-case"> 
