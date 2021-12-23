@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { FaList } from 'react-icons/fa'
 import { BsPlayBtn, BsPauseBtn } from 'react-icons/bs'
 import { BiVolumeFull } from 'react-icons/bi'
-import { getBookTitle, formatTime, afterIdle } from '../utils'
+import { getNameNoExt, formatTime, afterIdle } from '../utils'
 import LoadingSpinner from './LoadingSpinner'
 
 const MEDIA_API_URL = 'http://localhost:8888/media/'
@@ -79,7 +79,7 @@ const BookPlayer = ({ book, goHome, autoStart }) => {
     return (
         <>
             <div className="top-bar big-title">
-                <div className='book-title' onClick={goHome}>{getBookTitle(book.fl)}</div>
+                <div className='book-title' onClick={goHome}>{getNameNoExt(book.fl)}</div>
                 <button className="home-btn" onClick={goHome}><FaList size={80} /></button>
             </div>
             {isLoadingMeta && <LoadingSpinner />}

@@ -1,5 +1,5 @@
 import { PAGE_SIZE  } from "./BookCase"
-import { getBookTitle } from '../utils'
+import { getNameNoExt } from '../utils'
 
 const BookShelf = ({bookList, pageNumber, selectBook, customClasses}) => {
     const classes = ['book-shelf', ...customClasses].join(' ') 
@@ -14,9 +14,9 @@ const BookShelf = ({bookList, pageNumber, selectBook, customClasses}) => {
                     className="book-title" 
                     key={book.id} 
                     onClick={() => selectBook(book)} 
-                    title={getBookTitle(book.fl)}
+                    title={getNameNoExt(book.fl)}
                 >
-                    {getBookTitle(book.fl)}
+                    {getNameNoExt(book.fl)}
                 </div>)
             }
         </div>
