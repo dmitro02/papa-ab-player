@@ -1,8 +1,8 @@
 {
   "name": "papa-ab-player",
   "version": "1.0.0",
-  "description": "",
-  "exports": "./index.js",
+  "description": "server part of Papa-AB-Player app (audiobooks player for visually impaired)",
+  "exports": "./server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
