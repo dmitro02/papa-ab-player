@@ -40,17 +40,17 @@ app.post('/books/selected', async (req, res) => {
     try {
         await setSelectedBookId(req.query.id)
         const payload = getSelectedBook()
-        res.sendStatus(201).send(payload)      
+        res.status(201).send(payload)      
     } catch (e) {
         console.log(e.message)
         res.status(500).end(e.message)
     }
 })
 
-app.post('/book/:id', async (req, res) => {
+app.post('/book', async (req, res) => {
     try {
-        const payload = await setBook(req.params.id, req.body)
-        res.sendStatus(201).send(payload)
+        const payload = await setBook(req.body)
+        res.status(201).send(payload)
     } catch (e) {
         console.log(e.message)
         res.status(500).end(e.message)

@@ -1,4 +1,4 @@
-import { join, dirname } from 'path'
+import { join, dirname, extname } from 'path'
 import { Low, JSONFile } from 'lowdb'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
@@ -18,11 +18,12 @@ export const getBook = id => {
     return { id, ...book }
 }
 
-export const setBook = async (id, book) => {
+export const setBook = async (book) => {
+    const { id, ...newBook } = book
     const { books } = db.data
     books[id] = {
         ...books[id],
-        ...book
+        ...newBook
     }
     await db.write()
     return getBook(id)
@@ -46,9 +47,14 @@ const generateId = (length = 10) => {
 
 export const updateDb = async (booksFolder) => {
     const files = fs.readdirSync(booksFolder)
+    const audioFiles = files.filter(fileName =>
+        allowedFormats.includes(extname(fileName))
+    )
+
     const { books } = db.data
     const bookList = Object.values(books)
-    files.forEach(fileName => {
+
+    audioFiles.forEach(fileName => {
         if (!bookList.find((it) => it.fl === fileName)) {
             books[generateId()] = {
                 fl: fileName,
@@ -57,6 +63,13 @@ export const updateDb = async (booksFolder) => {
             }
         }
     })
+
+    Object.entries(books).forEach(([ k, v ]) => {
+        if (!audioFiles.includes(v.fl)) {
+            delete books[k]
+        }
+    })
+
     await db.write()
 }
 
@@ -65,5 +78,16 @@ export const initDb = async (booksFolder) => {
     db.data = db.data || { books: {} }
     updateDb(booksFolder)
 }
+
+const allowedFormats = [
+    '.mp3',
+    '.mp4',
+    '.m4a',
+    '.m4b',
+    '.aac',
+    '.ogg',
+    '.wma',
+    '.wav'    
+]
 
 export default db

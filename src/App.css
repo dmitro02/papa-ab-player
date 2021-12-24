@@ -99,7 +99,7 @@ button:disabled {
 }
 
 .book-title:nth-child(even) {
-    background-color: #003000;
+    background-color: #001600;
 }
 
 .play-pause-btns {

@@ -1,8 +1,8 @@
 export const fetchBooks = () =>
     fetch('/books').then(res => res.json())
 
-export const updateBook = (id, book) => {
-    return fetch('/book/' + id, {
+export const updateBook = (book) => {
+    return fetch('/book/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(book),

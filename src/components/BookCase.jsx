@@ -46,7 +46,7 @@ const BookCase = ({ bookList, selectBook, refresh, resume, disableResume }) => {
                 <button 
                     className="resume-btn" 
                     onClick={resume}
-                    disabled={disableResume} 
+                    disabled={disableResume || isLoading} 
                 >
                     <VscDebugContinue size={90} />
                 </button>
