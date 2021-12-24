@@ -60,10 +60,10 @@ progress {
     background-color: white;
 }
 ::-webkit-progress-value {
-    background: orange;
+    background: rgb(177, 0, 0);
 }
 ::-moz-progress-bar {
-    background: orange;
+    background: rgb(177, 0, 0);
 }
 
 .top-bar {

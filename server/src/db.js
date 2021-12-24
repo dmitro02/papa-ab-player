@@ -12,6 +12,11 @@ const db = new Low(adapter)
 export const getBookList = () =>
     Object.entries(db.data.books)
           .map(([ k, v ]) => ({ id: k, ...v }))
+          .sort((a, b) => {
+              if (a.fl < b.fl) return -1
+              if (a.fl > b.fl) return 1
+              return 0
+          })
 
 export const getBook = id => {
     const book = db.data.books[id]
