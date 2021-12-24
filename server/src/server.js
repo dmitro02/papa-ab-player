@@ -1,7 +1,12 @@
+import express from 'express'
 import { join, dirname, extname } from 'path'
 import { Low, JSONFile } from 'lowdb'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
+
+const [ libraryPath, port = 8888 ] = process.argv.slice(2)
+
+// ####################### DATABASE #######################
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -9,7 +14,7 @@ const file = join(__dirname, 'papa-ab-db.json')
 const adapter = new JSONFile(file)
 const db = new Low(adapter)
 
-export const getBookList = () =>
+const getBookList = () =>
     Object.entries(db.data.books)
           .map(([ k, v ]) => ({ id: k, ...v }))
           .sort((a, b) => {
@@ -18,12 +23,12 @@ export const getBookList = () =>
               return 0
           })
 
-export const getBook = id => {
+const getBook = id => {
     const book = db.data.books[id]
     return { id, ...book }
 }
 
-export const setBook = async (book) => {
+const setBook = async (book) => {
     const { id, ...newBook } = book
     const { books } = db.data
     books[id] = {
@@ -34,10 +39,10 @@ export const setBook = async (book) => {
     return getBook(id)
 }
 
-export const getSelectedBook = () =>
+const getSelectedBook = () =>
     getBook(db.data.selectedBookId)
 
-export const setSelectedBookId = async (id) => {
+const setSelectedBookId = async (id) => {
     db.data.selectedBookId = id
     await db.write()
 }
@@ -50,7 +55,7 @@ const generateId = (length = 10) => {
     return id.substring(0, length)
 }
 
-export const updateDb = async (booksFolder) => {
+const updateDb = async (booksFolder) => {
     const files = fs.readdirSync(booksFolder)
     const audioFiles = files.filter(fileName =>
         allowedFormats.includes(extname(fileName))
@@ -78,7 +83,7 @@ export const updateDb = async (booksFolder) => {
     await db.write()
 }
 
-export const initDb = async (booksFolder) => {
+const initDb = async (booksFolder) => {
     await db.read()
     db.data = db.data || { books: {} }
     updateDb(booksFolder)
@@ -95,4 +100,64 @@ const allowedFormats = [
     '.wav'    
 ]
 
-export default db
+// ####################### SERVER #######################
+
+const app = express()
+app.use(express.json())
+
+app.get('/books', async (req, res) => {
+    try {
+        req.query.updateDb === 'true' && await initDb(libraryPath)
+        const payload = getBookList()
+        res.send(payload)
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).end(e.message)
+    }
+})
+
+app.get('/books/selected', (req, res) => {
+    try {
+        const payload = getSelectedBook()
+        res.send(payload)
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).end(e.message)
+    }
+})
+
+app.post('/books/selected', async (req, res) => {
+    try {
+        await setSelectedBookId(req.query.id)
+        const payload = getSelectedBook()
+        res.status(201).send(payload)      
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).end(e.message)
+    }
+})
+
+app.post('/book', async (req, res) => {
+    try {
+        const payload = await setBook(req.body)
+        res.status(201).send(payload)
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).end(e.message)
+    }
+})
+
+app.get('/media/:bookId', (req, res) => {
+    try {
+        const book = getBook(req.params.bookId)
+        res.sendFile(join(libraryPath, book.fl))
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).end(e.message)
+    }
+})
+
+initDb(libraryPath)
+
+app.listen(port, () => 
+    console.log(`Server listening at http://localhost:${port}`))

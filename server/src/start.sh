@@ -1,2 +1,2 @@
 #!/bin/bash
-node index.js
+node server.js "/path/to/audiobooks/folder"
