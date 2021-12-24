@@ -25,7 +25,7 @@ const getBookList = () =>
 
 const getBook = id => {
     const book = db.data.books[id]
-    return { id, ...book }
+    return book ? { id, ...book } : null
 }
 
 const setBook = async (book) => {
