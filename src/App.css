@@ -47,10 +47,23 @@ button:disabled {
     cursor: default;
 }
 
-.progress-bar {
-    height: 240px;
+progress {
+    height: 120px;
     width: 100%;
+    margin: 60px 0 50px;
     cursor: pointer;
+    border: none;        /* FF */
+    background: white; /* FF */
+    -webkit-appearance: none;
+}
+::-webkit-progress-bar {
+    background-color: white;
+}
+::-webkit-progress-value {
+    background: orange;
+}
+::-moz-progress-bar {
+    background: orange;
 }
 
 .top-bar {
@@ -144,6 +157,17 @@ button:disabled {
 }
 
 /*############### VOLUME CONTROL ###############*/
+:root {
+    --track-height: 75px;
+    --track-color: white;
+    --track-border-radius: 50px;
+    --thumb-size: 180px;
+    --thumb-border-radius: 50%;
+    --thumb-background: white;
+    --thumb-margin-top: -50px;
+    --thumb-border: 8px solid black;
+}
+
 .volume-container {
     display: flex;
 }
@@ -157,37 +181,37 @@ input[name='volume'] {
     outline: none;
   }
   input[name='volume']::-webkit-slider-runnable-track {
-    height: 75px;
+    height: var(--track-height);
     cursor: pointer;
-    background: white;
-    border-radius: 50px;
+    background: var(--track-color);
+    border-radius: var(--track-border-radius);
   }
   input[name='volume']::-webkit-slider-thumb {
-    height: 180px;
-    width: 180px;
-    border-radius: 50%;
-    background: white;
+    height: var(--thumb-size);
+    width: var(--thumb-size);
+    border-radius: var(--thumb-border-radius);
+    background: var(--thumb-background);
     cursor: pointer;
     -webkit-appearance: none;
-    margin-top: -50px;
-    border: 8px solid black
+    margin-top: var(--thumb-margin-top);
+    border: var(--thumb-border);
   }
   input[name='volume']:focus::-webkit-slider-runnable-track {
     background: white;
   }
   input[name='volume']::-moz-range-track {
-    height: 75px;
+    height: var(--track-height);
     cursor: pointer;
-    background: white;
-    border-radius: 50px;
+    background: var(--track-color);
+    border-radius: var(--track-border-radius);
   }
   input[name='volume']::-moz-range-thumb {
-    height: 150px;
-    width: 150px;
-    border-radius: 50%;
-    background: white;
+    height: var(--thumb-size);
+    width: var(--thumb-size);
+    border-radius: var(--thumb-border-radius);
+    background: var(--thumb-background);
     cursor: pointer;
     -webkit-appearance: none;
-    margin-top: -35px;
-    border: 8px solid black
+    margin-top: var(--thumb-margin-top);
+    border: var(--thumb-border);
   }
