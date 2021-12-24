@@ -37,7 +37,7 @@ const MainContainer = () => {
         getSelectedBook().then((book) => {
             if (book.id) {
                 setSelectedBook(book)
-                setShowPlayer({ show: true })
+                !book.cm && setShowPlayer({ show: true })
             }
         })
     }, [])

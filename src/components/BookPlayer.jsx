@@ -65,18 +65,14 @@ const BookPlayer = ({ book, goHome, autoStart }) => {
     const handlePlay = () => setIsPlaying(true)
 
     const setBookPosition = () => {
-        return updateBook({ 
-            ...book, 
-            ps: audioRef.current.currentTime 
-        })
+        book.ps = audioRef.current.currentTime
+        return updateBook(book)
     }
 
     const setBookIsCompleted = () => {
-        return updateBook({ 
-            ...book, 
-            ps: audioRef.current.duration, 
-            cm: true 
-        })
+        book.ps = audioRef.current.duration
+        book.cm = true
+        return updateBook(book)
     }
 
     const handlePause = () => {
@@ -97,8 +93,7 @@ const BookPlayer = ({ book, goHome, autoStart }) => {
 
     const openLibrary = async () => {
         setIsLoading(true)
-        const res = await setBookPosition()
-        book.ps = res.ps
+        await setBookPosition()
         goHome()
     }
 

@@ -7,7 +7,7 @@
 - variables for volume slider CSS
 - sort books alphabetically
 - move completed books to the end
-- button to mark book as completed
+- button to mark/unmark book as completed
 - filter boooks alphabetically or by author
 
 ***
