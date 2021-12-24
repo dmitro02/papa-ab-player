@@ -104,6 +104,7 @@ const allowedFormats = [
 
 const app = express()
 app.use(express.json())
+app.use(express.static('public'))
 
 app.get('/books', async (req, res) => {
     try {

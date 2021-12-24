@@ -1,2 +1,4 @@
 #!/bin/bash
-node server.js "/path/to/audiobooks/folder"
+npm install
+node server.js "/path/to/papa-ab-library"
+

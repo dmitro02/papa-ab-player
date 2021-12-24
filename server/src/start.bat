@@ -1,0 +1,1 @@
+npm install && node server.js "X:\path\to\papa-ab-library"
