@@ -18,9 +18,19 @@ const MainContainer = () => {
 
     const loadBooks = (shouldUpdateDb) => {
         setBookList([])
+
         shouldUpdateDb
             ? updateLibrary().then(setBookList)
             : fetchBooks().then(setBookList)
+
+        getSelectedBook().then((book) => {
+            if (book.id) {
+                setSelectedBook(book)
+                !book.cm && setShowPlayer({ show: true })
+            } else {
+                setSelectedBook(null)
+            }
+        })
     }
 
     const resume = () => setShowPlayer({ show: true, autoStart: true })
@@ -32,15 +42,7 @@ const MainContainer = () => {
                 resume()
             })
 
-    useEffect(() => {
-        loadBooks()
-        getSelectedBook().then((book) => {
-            if (book.id) {
-                setSelectedBook(book)
-                !book.cm && setShowPlayer({ show: true })
-            }
-        })
-    }, [])
+    useEffect(() => loadBooks(), [])
 
     return (
         <div className="main-container">

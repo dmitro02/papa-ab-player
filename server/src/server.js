@@ -75,10 +75,10 @@ const updateDb = async (booksFolder) => {
     })
 
     Object.entries(books).forEach(([ k, v ]) => {
-        if (!audioFiles.includes(v.fl)) {
-            delete books[k]
-        }
+        if (!audioFiles.includes(v.fl)) delete books[k]
     })
+
+    if (!getSelectedBook()) db.data.selectedBookId = null
 
     await db.write()
 }
@@ -120,7 +120,7 @@ app.get('/books', async (req, res) => {
 app.get('/books/selected', (req, res) => {
     try {
         const payload = getSelectedBook()
-        res.send(payload)
+        res.send(payload || {})
     } catch (e) {
         console.log(e.message)
         res.status(500).end(e.message)

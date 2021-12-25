@@ -4,7 +4,6 @@
 ## TODO
 
 - run server as demon
-- BUG: if last page is 20 items empty next page appears
 - move completed books to the end
 - button to mark/unmark book as completed
 - filter boooks alphabetically or by author

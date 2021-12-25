@@ -6,7 +6,6 @@ import { getNameNoExt, formatTime, afterIdle } from '../utils'
 import LoadingSpinner from './LoadingSpinner'
 import { updateBook } from '../bookService'
 
-const MEDIA_API_URL = 'http://localhost:8888/media/'
 const DEFAULT_VOLUME = 0.3
 const LS_ITEM_VOLUME = 'papaAbPlayer.volume'
 
@@ -105,7 +104,7 @@ const BookPlayer = ({ book, goHome, autoStart }) => {
             </div>
             {isLoading && <LoadingSpinner />}
             <audio 
-                src={MEDIA_API_URL + book.id} type="audio/mpeg" 
+                src={'media/' + book.id} type="audio/mpeg" 
                 autoPlay={autoStart}
                 onPlay={handlePlay}
                 onPause={handlePause}
