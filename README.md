@@ -3,7 +3,11 @@
 
 ## TODO
 
-- run server as demon
+- use icons instead of html symbols
+- icon for progress bar
+- remake volume slider using progress
+- handle "addres already in use"
+- start.bat
 - move completed books to the end
 - button to mark/unmark book as completed
 - filter boooks alphabetically or by author
