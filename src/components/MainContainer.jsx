@@ -16,21 +16,20 @@ const MainContainer = () => {
     const [ showPlayer, setShowPlayer ] = 
         useState({ show: false, autoStart: false})
 
-    const loadBooks = (shouldUpdateDb) => {
+    const loadBooks = () => {
         setBookList([])
-
-        shouldUpdateDb
-            ? updateLibrary().then(setBookList)
-            : fetchBooks().then(setBookList)
-
+        fetchBooks().then(setBookList)
         getSelectedBook().then((book) => {
-            if (book.id) {
-                setSelectedBook(book)
-                !book.cm && setShowPlayer({ show: true })
-            } else {
-                setSelectedBook(null)
-            }
+            setSelectedBook(book.id ? book : null)
+            setShowPlayer({ show: !book.cm })
         })
+    }
+
+    const reloadBooks = () => {
+        setBookList([])
+        updateLibrary().then(setBookList)
+        getSelectedBook().then((book) =>
+            setSelectedBook(book.id ? book : null))
     }
 
     const resume = () => setShowPlayer({ show: true, autoStart: true })
@@ -55,7 +54,7 @@ const MainContainer = () => {
                 : <BookCase 
                     bookList={bookList} 
                     selectBook={selectBook} 
-                    refresh={() => loadBooks(true)}
+                    refresh={() => reloadBooks()}
                     resume={resume}
                     disableResume={!selectedBook}
                 />

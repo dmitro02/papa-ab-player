@@ -15,18 +15,14 @@ const BookCase = ({ bookList, selectBook, refresh, resume, disableResume }) => {
 
     const isLoading = !bookList || !bookList.length 
 
-    const maxPageNumber = Math.floor(bookList.length / PAGE_SIZE)
-
     const hasPrevPage = pageNumber >= 2
     const hasNextPage = (pageNumber + 2) * PAGE_SIZE < bookList.length
 
-    const goToPreviousPage = () => {
+    const goToPreviousPage = () =>
         hasPrevPage && setPageNumber(pageNumber - 2)
-    }
 
-    const goToNextPage = () => {
+    const goToNextPage = () =>
         hasNextPage && setPageNumber(pageNumber + 2)
-    }
 
     return (
         <>
