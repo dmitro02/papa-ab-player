@@ -10,7 +10,13 @@ import { BiRefresh } from 'react-icons/bi'
 
 export const PAGE_SIZE = 10
 
-const BookCase = ({ bookList, selectBook, refresh, resume, disableResume }) => {
+const BookCase = ({ 
+    bookList, 
+    selectBook, 
+    refresh, 
+    resume, 
+    disableResume
+}) => {
     const [ pageNumber, setPageNumber ] = useState(0)
 
     const isLoading = !bookList || !bookList.length 

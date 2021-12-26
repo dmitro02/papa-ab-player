@@ -21,3 +21,15 @@ export const afterIdle = (handler, delayMs) => {
         timeout = setTimeout(() => handler(...args), delayMs)
     }
 }
+
+export const sortByFileName = (a, b) => {
+    if (a.fl < b.fl) return -1
+    if (a.fl > b.fl) return 1
+    return 0
+}
+
+export const sortByCompleted = (a, b) => {
+    if (!a.cm && b.cm) return -1
+    if (a.cm && !b.cm) return 1
+    return 0
+}

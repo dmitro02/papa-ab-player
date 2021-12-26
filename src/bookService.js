@@ -1,7 +1,7 @@
-export const fetchBooks = () =>
+export const apiFetchBooks = () =>
     fetch('/books').then(res => res.json())
 
-export const updateBook = (book) => {
+export const apiUpdateBook = (book) => {
     return fetch('/book/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -9,12 +9,12 @@ export const updateBook = (book) => {
     }).then(res => res.json())
 }
 
-export const updateLibrary = () =>
+export const apiUpdateLibrary = () =>
     fetch('/books?updateDb=true').then(res => res.json())
 
-export const getSelectedBook = () =>
+export const apiGetSelectedBook = () =>
     fetch('/books/selected').then(res => res.json()) 
 
-export const setSelectedBookId = (id) =>
+export const apiSetSelectedBookId = (id) =>
     fetch('/books/selected?id=' + id, { method: 'POST' })
         .then(res => res.json())

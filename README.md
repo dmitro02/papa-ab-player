@@ -3,12 +3,11 @@
 
 ## TODO
 
-- handle "addres already in use"
 - start.bat
-- move completed books to the end
 - button to mark/unmark book as completed
 - filter boooks alphabetically or by author
 - button tooltips
+- implement server side pagination
 
 ***
 

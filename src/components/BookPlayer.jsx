@@ -5,19 +5,22 @@ import { BiVolumeFull } from 'react-icons/bi'
 import { ImClock } from 'react-icons/im'
 import { getNameNoExt, formatTime, afterIdle } from '../utils'
 import LoadingSpinner from './LoadingSpinner'
-import { updateBook } from '../bookService'
 
 const DEFAULT_VOLUME = 0.3
 const LS_ITEM_VOLUME = 'papaAbPlayer.volume'
 
-const BookPlayer = ({ book, goHome, autoStart }) => {
+const BookPlayer = ({ 
+    book, 
+    goHome, 
+    autoStart, 
+    updateBook 
+}) => {
     const [ isPlaying, setIsPlaying ] = useState(false)
     const [ isLoading, setIsLoading ] = useState(true)
 
     useEffect(() => {
-        const volume = 
-            parseFloat(localStorage.getItem(LS_ITEM_VOLUME)) 
-            || DEFAULT_VOLUME
+        const volume = parseFloat(localStorage.getItem(LS_ITEM_VOLUME)) 
+                       || DEFAULT_VOLUME
         setVolume(volume)
         volumeRef.current.value = volume
 
@@ -69,25 +72,24 @@ const BookPlayer = ({ book, goHome, autoStart }) => {
 
     const handlePlay = () => setIsPlaying(true)
 
-    const setBookPosition = () => {
+    const setBookPosition = () =>
         book.ps = audioRef.current.currentTime
-        return updateBook(book)
-    }
 
     const setBookIsCompleted = () => {
         book.ps = audioRef.current.duration
         book.cm = true
-        return updateBook(book)
     }
 
     const handlePause = () => {
         setIsPlaying(false)
         setBookPosition()
+        return updateBook(book)
     }
 
     const handleEnded = () => {
         setIsPlaying(false)
         setBookIsCompleted()
+        return updateBook(book, true)
     }
 
     const setVolume = (volume) => audioRef.current.volume = volume
@@ -97,8 +99,10 @@ const BookPlayer = ({ book, goHome, autoStart }) => {
     }, 1000)
 
     const openLibrary = async () => {
-        setIsLoading(true)
-        await setBookPosition()
+        if (isPlaying) {
+            setIsLoading(true)
+            await handlePause()
+        }
         goHome()
     }
 

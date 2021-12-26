@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react'
 import BookPlayer from './BookPlayer'
 import BookCase from './BookCase'
 import { 
-    fetchBooks, 
-    setSelectedBookId, 
-    getSelectedBook,
-    updateLibrary 
+    apiFetchBooks, 
+    apiSetSelectedBookId, 
+    apiGetSelectedBook,
+    apiUpdateLibrary,
+    apiUpdateBook
 } from '../bookService'
+import { sortByFileName, sortByCompleted } from '../utils'
 
 const MainContainer = () => {
     const [ bookList, setBookList ] = useState([])
@@ -18,8 +20,8 @@ const MainContainer = () => {
 
     const loadBooks = () => {
         setBookList([])
-        fetchBooks().then(setBookList)
-        getSelectedBook().then((book) => {
+        apiFetchBooks().then(setBookList)
+        apiGetSelectedBook().then((book) => {
             setSelectedBook(book.id ? book : null)
             setShowPlayer({ show: !book.cm })
         })
@@ -27,19 +29,30 @@ const MainContainer = () => {
 
     const reloadBooks = () => {
         setBookList([])
-        updateLibrary().then(setBookList)
-        getSelectedBook().then((book) =>
+        apiUpdateLibrary().then(setBookList)
+        apiGetSelectedBook().then((book) =>
             setSelectedBook(book.id ? book : null))
     }
 
     const resume = () => setShowPlayer({ show: true, autoStart: true })
 
     const selectBook = (book) =>
-        setSelectedBookId(book.id)
+        apiSetSelectedBookId(book.id)
             .then((book) => {
                 setSelectedBook(book)
                 resume()
             })
+    
+    const updateBook = async (book, needSort) => {
+        const updatedBook = await apiUpdateBook(book)
+        const updatedBookList = [ ...bookList ]
+        const index = updatedBookList.findIndex(b => b.id === book.id)
+        updatedBookList[index] = updatedBook
+        needSort && updatedBookList
+            .sort(sortByFileName)
+            .sort(sortByCompleted)
+        setBookList(updatedBookList)
+    } 
 
     useEffect(() => loadBooks(), [])
 
@@ -50,11 +63,12 @@ const MainContainer = () => {
                     book={selectedBook} 
                     goHome={() => setShowPlayer({ show: false })}
                     autoStart={showPlayer.autoStart}
+                    updateBook={updateBook}
                 />
                 : <BookCase 
                     bookList={bookList} 
                     selectBook={selectBook} 
-                    refresh={() => reloadBooks()}
+                    refresh={reloadBooks}
                     resume={resume}
                     disableResume={!selectedBook}
                 />

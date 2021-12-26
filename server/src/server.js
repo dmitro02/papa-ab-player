@@ -17,11 +17,8 @@ const db = new Low(adapter)
 const getBookList = () =>
     Object.entries(db.data.books)
           .map(([ k, v ]) => ({ id: k, ...v }))
-          .sort((a, b) => {
-              if (a.fl < b.fl) return -1
-              if (a.fl > b.fl) return 1
-              return 0
-          })
+          .sort(sortByFileName)
+          .sort(sortByCompleted)
 
 const getBook = id => {
     const book = db.data.books[id]
@@ -87,6 +84,18 @@ const initDb = async (booksFolder) => {
     await db.read()
     db.data = db.data || { books: {} }
     updateDb(booksFolder)
+}
+
+const sortByFileName = (a, b) => {
+    if (a.fl < b.fl) return -1
+    if (a.fl > b.fl) return 1
+    return 0
+}
+
+const sortByCompleted = (a, b) => {
+    if (!a.cm && b.cm) return -1
+    if (a.cm && !b.cm) return 1
+    return 0
 }
 
 const allowedFormats = [
