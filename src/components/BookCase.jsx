@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import BookShelf from './BookShelf'
 import LoadingSpinner from './LoadingSpinner'
-import { VscDebugContinue } from 'react-icons/vsc'
+import { 
+    FaLongArrowAltLeft,
+    FaLongArrowAltRight,
+    FaPlay 
+} from 'react-icons/fa'
+import { BiRefresh } from 'react-icons/bi'
 
 export const PAGE_SIZE = 10
 
@@ -30,25 +35,31 @@ const BookCase = ({ bookList, selectBook, refresh, resume, disableResume }) => {
                     className="reload-btn" 
                     onClick={refresh} 
                     disabled={isLoading}
-                />
+                >
+                    <BiRefresh />
+                </button>
                 <div>
                     <button 
                         className="nav-arrow-left-btn" 
                         onClick={goToPreviousPage}
                         disabled={!hasPrevPage} 
-                    />
+                    >
+                        <FaLongArrowAltLeft />
+                    </button>
                     <button 
                         className="nav-arrow-right-btn" 
                         onClick={goToNextPage} 
                         disabled={!hasNextPage}
-                    />
+                    >
+                        <FaLongArrowAltRight />
+                    </button>
                 </div>
                 <button 
                     className="resume-btn" 
                     onClick={resume}
                     disabled={disableResume || isLoading} 
                 >
-                    <VscDebugContinue size={90} />
+                    <FaPlay />
                 </button>
             </div>
             {isLoading && <LoadingSpinner />}
