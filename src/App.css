@@ -117,12 +117,13 @@ progress {
 .play-pause-btn {
     font-size: 280px;
     height: 0;
+    margin-top: -12px;
 }
 
 .time-bar {
     font-size: 70px;
     font-weight: bold;
-    margin: 15px auto 0;
+    margin: 0 auto;
     width: fit-content;
 }
 
@@ -134,7 +135,7 @@ progress {
     display: flex;
     align-items: center;
     font-size: 128px;
-    margin-top: 82px;
+    margin-top: 46px;
 }
 
 .progress-container svg {
@@ -156,22 +157,25 @@ progress {
     display: flex;
     justify-content: space-between;
     height: 380px;
+    border: 6px solid;
+    margin-top: 50px;
+    border-radius: 4px;
+}
+
+.play-and-time {
+    padding: 0 20px;
 }
 
 .book-cover {
-    border: 3px solid;
-    border-radius: 3px;
-    padding: 3px;
+    border-left: 6px solid;
+    padding: 6px;
     height: 100%;
-    margin-top: 36px;
 }
 
 .book-info {
     width: 100%;
-    height: 100%;
-    border: 3px solid;
-    border-radius: 3px;
-    margin: 36px 20px 0;
+    border-left: 6px solid;
+    padding: 20px;
 }
 
 /*############### LOADING SPINNER ###############*/

@@ -143,7 +143,7 @@ const BookPlayer = ({
                 ref={audioRef}
             />
             <div className="player-row">
-                <div>
+                <div className='play-and-time'>
                     <div className="play-pause-btns">
                         {isPlaying 
                             ? <button onClick={pause} className="play-pause-btn">
@@ -154,9 +154,7 @@ const BookPlayer = ({
                             </button>
                         }
                     </div>
-                    <div className="time-bar">
-                        <span ref={timeRef} />
-                    </div>
+                    <div className="time-bar" ref={timeRef} />
                 </div>
                 <div className="book-info">
                     <div>{getNameNoExt(book.fl)}</div>
