@@ -27,6 +27,7 @@ const BookPlayer = ({
         volumeRef.current.value = volume
 
         audioRef.current.currentTime = book.ps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -38,7 +39,7 @@ const BookPlayer = ({
             setBookMeta(imageSrc)
         }
         getMeta()
-    }, [])
+    }, [book.id])
 
     const audioRef = useRef()
     const progressRef = useRef()
