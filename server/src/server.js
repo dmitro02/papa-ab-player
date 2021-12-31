@@ -3,6 +3,7 @@ import { join, dirname, extname } from 'path'
 import { Low, JSONFile } from 'lowdb'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
+import * as mm from 'music-metadata'
 
 const [ libraryPath, port = 8888 ] = process.argv.slice(2)
 
@@ -161,6 +162,19 @@ app.get('/media/:bookId', (req, res) => {
     try {
         const book = getBook(req.params.bookId)
         res.sendFile(join(libraryPath, book.fl))
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).end(e.message)
+    }
+})
+
+app.get('/media/:bookId/metadata', async (req, res) => {
+    try {
+        const book = getBook(req.params.bookId)
+        const filePath = join(libraryPath, book.fl)
+        const {common} = await mm.parseFile(filePath)
+        const cover = mm.selectCover(common.picture)
+        res.send(cover)
     } catch (e) {
         console.log(e.message)
         res.status(500).end(e.message)

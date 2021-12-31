@@ -5,6 +5,7 @@ import { BiVolumeFull } from 'react-icons/bi'
 import { ImClock } from 'react-icons/im'
 import { getNameNoExt, formatTime, afterIdle } from '../utils'
 import LoadingSpinner from './LoadingSpinner'
+import { apiGetBookMetadata } from '../bookService'
 
 const DEFAULT_VOLUME = 0.3
 const LS_ITEM_VOLUME = 'papaAbPlayer.volume'
@@ -17,6 +18,7 @@ const BookPlayer = ({
 }) => {
     const [ isPlaying, setIsPlaying ] = useState(false)
     const [ isLoading, setIsLoading ] = useState(true)
+    const [ bookMeta, setBookMeta ] = useState(null)
 
     useEffect(() => {
         const volume = parseFloat(localStorage.getItem(LS_ITEM_VOLUME)) 
@@ -25,6 +27,17 @@ const BookPlayer = ({
         volumeRef.current.value = volume
 
         audioRef.current.currentTime = book.ps
+    }, [])
+
+    useEffect(() => {
+        const getMeta = async () => {
+            const metaRes = await apiGetBookMetadata(book.id)
+            const imgBuffer = metaRes.data.data 
+            const blob = new Blob([new Uint8Array(imgBuffer).buffer])
+            const imageSrc = URL.createObjectURL(blob)
+            setBookMeta(imageSrc)
+        }
+        getMeta()
     }, [])
 
     const audioRef = useRef()
@@ -128,19 +141,27 @@ const BookPlayer = ({
                 onVolumeChange={updateVolumeBar}
                 ref={audioRef}
             />
-            <div className="play-pause-btns">
-                {isPlaying 
-                    ? <button onClick={pause} className="play-pause-btn">
-                          <BsPauseBtn />
-                      </button>
-                    : <button onClick={play} className="play-pause-btn">
-                          <BsPlayBtn />
-                      </button>
-                }
-            </div>
-            <div className="time-bar">
-                <span ref={timeRef} />
-                <span ref={durationRef}/>
+            <div className="player-row">
+                <div>
+                    <div className="play-pause-btns">
+                        {isPlaying 
+                            ? <button onClick={pause} className="play-pause-btn">
+                                <BsPauseBtn />
+                            </button>
+                            : <button onClick={play} className="play-pause-btn">
+                                <BsPlayBtn />
+                            </button>
+                        }
+                    </div>
+                    <div className="time-bar">
+                        <span ref={timeRef} />
+                    </div>
+                </div>
+                <div className="book-info">
+                    <div>{getNameNoExt(book.fl)}</div>
+                    <div ref={durationRef} />
+                </div>
+                <img src={bookMeta} alt="book cover" className="book-cover" />
             </div>
             <div className='progress-container'>
                 <ImClock />

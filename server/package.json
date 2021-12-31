@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server.js \"C:\\Data\\papa-ab-library\""
+    "start": "node src/server.js \"D:\\Downloads\\Audio\\Audiobooks\\ПАПА\""
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/dmitro02/papa-ab-player#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "lowdb": "^3.0.0"
+    "lowdb": "^3.0.0",
+    "music-metadata": "^7.11.4"
   }
 }

@@ -18,3 +18,6 @@ export const apiGetSelectedBook = () =>
 export const apiSetSelectedBookId = (id) =>
     fetch('/books/selected?id=' + id, { method: 'POST' })
         .then(res => res.json())
+
+export const apiGetBookMetadata = (id) => 
+    fetch(`/media/${id}/metadata`).then(res => res.json())
