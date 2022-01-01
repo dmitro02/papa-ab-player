@@ -16,6 +16,8 @@
 - ability to set max volume 
 - popup with author, full title and play button (set completed button?)
 - go to list by clicking whole top bar
+- separate spinners for meta and audio in player
+
 ***
 
 ## NOTES

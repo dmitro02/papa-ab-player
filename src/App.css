@@ -106,7 +106,7 @@ progress {
 }
 
 .book-title:nth-child(even) {
-    background-color: #001600;
+    background-color: #161616;
 }
 
 .play-pause-btns {
@@ -175,7 +175,21 @@ progress {
 .book-info {
     width: 100%;
     border-left: 6px solid;
-    padding: 20px;
+    padding: 14px 20px 20px;
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.book-info ul {
+    margin: 0;
+}
+
+.book-info li {
+    margin-bottom: 6px;
+}
+
+.book-artist {
+    font-style: italic;
 }
 
 /*############### LOADING SPINNER ###############*/

@@ -172,9 +172,27 @@ app.get('/media/:bookId/metadata', async (req, res) => {
     try {
         const book = getBook(req.params.bookId)
         const filePath = join(libraryPath, book.fl)
-        const {common} = await mm.parseFile(filePath)
-        const cover = mm.selectCover(common.picture)
-        res.send(cover)
+        const { common, format } = 
+            await mm.parseFile(filePath, { duration: true })
+        const {
+            album,
+            albumartist,
+            artist,
+            title,
+            year,
+            picture
+        } = common
+        const { duration } = format
+        const meta = {
+            album,
+            albumartist,
+            artist,
+            title,
+            year,
+            duration,
+            cover: mm.selectCover(picture)
+        }
+        res.send(meta)
     } catch (e) {
         console.log(e.message)
         res.status(500).end(e.message)

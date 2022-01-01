@@ -10,6 +10,23 @@ import { apiGetBookMetadata } from '../bookService'
 const DEFAULT_VOLUME = 0.3
 const LS_ITEM_VOLUME = 'papaAbPlayer.volume'
 
+const getImgSrc = (meta) => {
+    const imgBuffer = meta.cover?.data.data 
+    if (!imgBuffer) return null
+    const blob = new Blob([new Uint8Array(imgBuffer).buffer])
+    return URL.createObjectURL(blob)
+}
+
+const normalizeMeta = (meta) => {
+    let { album, albumartist, artist, title } = meta
+    return {
+        ...meta,
+        albumartist: albumartist === artist ? null : albumartist,
+        album: album === title ? null : album,
+        imgSrc: getImgSrc(meta)
+    }
+}
+
 const BookPlayer = ({ 
     book, 
     goHome, 
@@ -21,24 +38,26 @@ const BookPlayer = ({
     const [ bookMeta, setBookMeta ] = useState(null)
 
     useEffect(() => {
-        const volume = parseFloat(localStorage.getItem(LS_ITEM_VOLUME)) 
-                       || DEFAULT_VOLUME
-        setVolume(volume)
-        volumeRef.current.value = volume
-
-        audioRef.current.currentTime = book.ps
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    useEffect(() => {
-        const getMeta = async () => {
-            const metaRes = await apiGetBookMetadata(book.id)
-            const imgBuffer = metaRes.data.data 
-            const blob = new Blob([new Uint8Array(imgBuffer).buffer])
-            const imageSrc = URL.createObjectURL(blob)
-            setBookMeta(imageSrc)
+        const setInitialVolume = () => {
+            const volume = parseFloat(localStorage.getItem(LS_ITEM_VOLUME)) 
+                || DEFAULT_VOLUME
+            setVolume(volume)
+            volumeRef.current.value = volume
         }
+
+        const setInitialTime = () => {
+            audioRef.current.currentTime = book.ps
+        }
+
+        const getMeta = async () => {
+            const meta = await apiGetBookMetadata(book.id)
+            setBookMeta(normalizeMeta(meta))
+        }
+
+        setInitialVolume()
+        setInitialTime()
         getMeta()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [book.id])
 
     const audioRef = useRef()
@@ -55,7 +74,7 @@ const BookPlayer = ({
         const { duration, currentTime } = audioRef.current
         progressRef.current.setAttribute('max', duration)
         timeRef.current.textContent = formatTime(currentTime)
-        durationRef.current.textContent = '/' + formatTime(duration)
+        durationRef.current.textContent = formatTime(duration)
         setIsLoading(false)
     }
 
@@ -157,10 +176,39 @@ const BookPlayer = ({
                     <div className="time-bar" ref={timeRef} />
                 </div>
                 <div className="book-info">
-                    <div>{getNameNoExt(book.fl)}</div>
-                    <div ref={durationRef} />
+                    <ul>
+                        {bookMeta?.albumartist && 
+                            <li className="book-artist">
+                                {bookMeta.albumartist}
+                            </li>
+                        }
+                        {bookMeta?.artist && 
+                            <li className="book-artist">
+                                {bookMeta.artist}</li>
+                            }
+                        {bookMeta?.album && 
+                            <li>
+                                {bookMeta.album}
+                            </li>
+                        }
+                        {bookMeta?.title && 
+                            <li>
+                                {bookMeta.title}
+                            </li>
+                        }
+                        {bookMeta?.year && 
+                            <li>
+                                {bookMeta.year}
+                            </li>
+                        }
+                        <li ref={durationRef} />
+                    </ul>
                 </div>
-                <img src={bookMeta} alt="book cover" className="book-cover" />
+                {bookMeta?.imgSrc && <img 
+                    src={bookMeta?.imgSrc} 
+                    alt="book cover" 
+                    className="book-cover" 
+                />}
             </div>
             <div className='progress-container'>
                 <ImClock />
